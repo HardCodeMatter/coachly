@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
+        {% for course in courses %}
+            <div class="col">
+                <div class="card">
+                    <img src="{{ course.image.url }}" class="card-img-top" style="height: 120px;" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">{{ course.name }}</h5>
+                        <p class="card-text text-muted">Author: {{ course.author }}</p>
+                    </div>
+
+                    <a href="#" class="stretched-link"></a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
