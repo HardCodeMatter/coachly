@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from .models import Course
 from .forms import CourseForm
+from .services import course_create
+from services import all_objects
 
 from random import randint
 
 
-def course_list(request):
-    courses = Course.objects.all()
+def course_list_view(request):
+    courses = all_objects(Course)
 
     context = {
         'courses': courses,
@@ -14,17 +16,20 @@ def course_list(request):
 
     return render(request, 'course/course_list.html', context)
 
-def course_create(request):
+def course_create_view(request):
     if request.method == 'POST':
         form = CourseForm(request.POST, request.FILES)
 
         if form.is_valid():
-            object = form.save(commit=False)
-            object.author = request.user
-            object.course_code = randint(100000, 999999)
-            object.save()
+            course_create(
+                author=request.user,
+                course_code=randint(100000, 999999),
+                name=form.cleaned_data['name'],
+                description=form.cleaned_data['description'],
+                image=form.cleaned_data['image'],
+            )
 
-            return redirect('/course')
+            return redirect('/course/')
     else:
         form = CourseForm()
 
