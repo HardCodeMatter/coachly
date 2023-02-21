@@ -16,7 +16,7 @@
                         <p class="card-text text-muted">Author: {{ course.author }}</p>
                     </div>
 
-                    <a href="#" class="stretched-link"></a>
+                    <a href="{% url 'course_detail' course.id %}" class="stretched-link"></a>
                 </div>
             </div>
         {% endfor %}
