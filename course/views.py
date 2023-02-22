@@ -1,17 +1,22 @@
 from django.shortcuts import render, redirect
+from django.core.exceptions import ObjectDoesNotExist
 from .models import Course
 from .forms import CourseForm
-from .services import course_create
+from .services import (
+    course_create, 
+    member_create,
+    course_filter_by_user
+)
 from services import (all_objects, get_objects)
 
 from random import randint
 
 
 def course_list_view(request):
-    courses = all_objects(Course)
+    members = course_filter_by_user(request.user)
 
     context = {
-        'courses': courses,
+        'members': members,
     }
 
     return render(request, 'course/course_list.html', context)
@@ -49,15 +54,20 @@ def course_create_view(request):
         form = CourseForm(request.POST, request.FILES)
 
         if form.is_valid():
-            course_create(
+            course = course_create(
                 author=request.user,
                 course_code=randint(100000, 999999),
                 name=form.cleaned_data['name'],
                 description=form.cleaned_data['description'],
                 image=form.cleaned_data['image'],
             )
+            member_create(
+                user=request.user,
+                course=course,
+                role='TEACHER',
+            )
 
-            return redirect('/course/')
+            return redirect(f'/course/{course.pk}')
     else:
         form = CourseForm()
 

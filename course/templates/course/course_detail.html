@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
+    <div class="bg-danger container">
         <div class="card text-bg-dark" style="width: 100%; height: 240px;">
             <img src="{{ course.image.url }}" class="card-img h-100" alt="...">
             <div class="card-img-overlay">
@@ -12,25 +12,34 @@
             </div>
         </div>
 
-        <div class="list-group mt-3">
-            <div class="list-group-item">
-                <p class="m-2 text-muted"><i class="bi bi-pencil me-2"></i>Write a message for your course.</p>
-            
-                <a class="stretched-link" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"></a>
+        <div class="row mt-3">
+            <div class="col-2 col-md-3 col-lg-2">
+                <div class="bg-white rounded p-3">
+                    <small class="text-muted">Course code</small><br />
+                    <b>{{ course.course_code }}</b>
+                </div>
             </div>
-    
-            <div class="collapse list-group-item" id="collapseExample">
-                <form>
-                    <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Your message</label>
-                        <textarea type="textarea" class="form-control" id="exampleInputPassword1" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Disable comments</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Publish</button>
-                </form>
+
+            <div class="col col-sm-12 col-md list-group">
+                <div class="list-group-item">
+                    <p class="m-2 text-muted"><i class="bi bi-pencil me-2"></i>Write a message for your course.</p>
+                
+                    <a class="stretched-link" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"></a>
+                </div>
+        
+                <div class="collapse list-group-item" id="collapseExample">
+                    <form>
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Your message</label>
+                            <textarea type="textarea" class="form-control" id="exampleInputPassword1" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Disable comments</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Publish</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

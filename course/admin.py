@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course
+from .models import Course, Member
 
 
 @admin.register(Course)
@@ -21,4 +21,19 @@ class CourseAdmin(admin.ModelAdmin):
 
     search_fields = ('name', 'author', 'course_code', 'is_active', 'is_premium',)
     readonly_fields = ('author',)
+    ordering = ('-id',)
+
+
+@admin.register(Member)
+class MemberAdmin(admin.ModelAdmin):
+    list_display = ('user', 'course', 'role',)
+    list_filter = ('user', 'course', 'role',)
+
+    fieldsets = [
+        (None, {
+            'fields': ('user', 'course', 'role',),
+        }),
+    ]
+
+    search_fields = ('user', 'course', 'role',)
     ordering = ('-id',)

@@ -24,5 +24,24 @@ class Course(models.Model):
         help_text='Indicates a user who has an active account.'
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.name}'
+
+
+class Member(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    
+    class Roles(models.TextChoices):
+        TEACHER = 'TEACHER', 'Teacher'
+        STUDENT = 'STUDENT', 'Student'
+
+    role = models.CharField(
+        ('role'),
+        max_length=50,
+        choices=Roles.choices,
+        default=Roles.STUDENT,
+    )
+
+    def __str__(self) -> str:
+        return f'{self.user} - {self.course}'
