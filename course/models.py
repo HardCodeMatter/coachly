@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from user.models import User
 
 
@@ -45,3 +46,19 @@ class Member(models.Model):
 
     def __str__(self) -> str:
         return f'{self.user} - {self.course}'
+
+
+class Announcement(models.Model):
+    announcement = models.TextField(('announcement'), max_length=1500)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(('data created'), default=timezone.now)
+
+    is_limited = models.BooleanField(
+        ('limited'),
+        default=False,
+        help_text='Indicates a announcement is limited for commenting.'
+    )
+
+    def __str__(self) -> str:
+        return f'Announcement {self.pk}'

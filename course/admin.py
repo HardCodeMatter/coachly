@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import Course, Member
+from .models import (
+    Course,
+    Member,
+    Announcement
+)
 
 
 @admin.register(Course)
@@ -36,4 +40,25 @@ class MemberAdmin(admin.ModelAdmin):
     ]
 
     search_fields = ('user', 'course', 'role',)
+    ordering = ('-id',)
+
+
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('id', 'course', 'author', 'is_limited',)
+    list_filter = ('id', 'course', 'author', 'is_limited', 'date_created',)
+
+    fieldsets = [
+        (None, {
+            'fields': ('course', 'author',),
+        }),
+        ('Description', {
+            'fields': ('announcement',),
+        }),
+        ('Date and limit', {
+            'fields': ('date_created', 'is_limited',),
+        }),
+    ]
+
+    search_fields = ('id', 'course', 'author', 'is_limited', 'date_created',)
     ordering = ('-id',)

@@ -1,12 +1,19 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
     <div class="container">
         <div class="card text-bg-dark" style="width: 100%; height: 240px;">
             <img src="{{ course.image.url }}" class="card-img h-100" alt="...">
             <div class="card-img-overlay">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title">{{ course.name }}</h4>
+                    <h4 class="card-title">
+                        {% if course.is_premium %}
+                            <i class="bi bi-patch-check-fill text-primary"></i>
+                        {% endif %}
+                        {{ course.name }}
+                    </h4>
                     <a href="{% url 'course_edit' course.id %}" class="btn btn-sm bg-white text-dark"><i class="bi bi-pencil me-2"></i>Setting</a>
                 </div>
             </div>
@@ -14,32 +21,67 @@
 
         <div class="row mt-3">
             <div class="col-2 col-md-3 col-lg-2">
-                <div class="bg-white rounded border p-3">
+                <div class="bg-white rounded border p-3 mb-3">
                     <small class="text-muted">Course code</small><br />
                     <b>{{ course.course_code }}</b>
                 </div>
+
+                <div class="bg-white rounded border p-3">
+                    <small class="text-muted">Students</small><br />
+                    <b>1</b>
+                </div>
             </div>
 
-            <div class="col col-sm-12 col-md list-group">
-                <div class="list-group-item">
-                    <p class="m-2 text-muted"><i class="bi bi-pencil me-2"></i>Write a message for your course.</p>
-                
-                    <a class="stretched-link" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"></a>
+            <div class="col col-sm-12 col-md">
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <p class="m-2 text-muted"><i class="bi bi-pencil me-2"></i>Write a message for your course.</p>
+                    
+                        <a class="stretched-link" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"></a>
+                    </div>
+            
+                    <div class="collapse list-group-item" id="collapseExample">
+                        <form action="" method="post">
+                            {% csrf_token %}
+    
+                            <div class="col d-grid gap-3">
+                                <div class="row" rows="3">
+                                    {{ form.announcement|as_crispy_field }}
+                                </div>
+                            
+                                <div class="row">
+                                    {{ form.is_limited|as_crispy_field }}
+                                </div>
+                            </div>
+    
+                            <button type="submit" class="btn btn-primary">Publish</button>
+                        </form>
+                    </div>
                 </div>
-        
-                <div class="collapse list-group-item" id="collapseExample">
-                    <form>
-                        <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Your message</label>
-                            <textarea type="textarea" class="form-control" id="exampleInputPassword1" rows="3"></textarea>
+
+                {% for announcement in announcements %}
+                    <div class="list-group">
+                        <div class="list-group-item mt-3">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <small>
+                                        {{ announcement.author }}
+                                        {% if course.author == announcement.author %}
+                                            <i class="bi bi-star-fill text-warning"></i>
+                                        {% endif %}
+                                    </small>
+                                </div>
+                                <div class="text-muted">
+                                    <small>{{ announcement.date_created }}</small>
+                                </div>
+                            </div>
+
+                            <div class="lh-sm mt-2 mb-2">
+                                <small>{{ announcement.announcement }}</small>
+                            </div>
                         </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">Disable comments</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Publish</button>
-                    </form>
-                </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

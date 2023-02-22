@@ -1,10 +1,19 @@
 from django.shortcuts import render, redirect
-from .models import Course, Member
-from .forms import (CourseForm, CourseJoinForm)
+from .models import (
+    Course,
+    Member,
+    Announcement
+)
+from .forms import (
+    CourseForm, 
+    CourseJoinForm,
+    AnnounceForm
+)
 from .services import (
     course_create, 
     member_create,
-    course_filter_by_user
+    course_filter_by_user,
+    announcement_create
 )
 from services import (all_objects, filter_objects, get_objects)
 
@@ -22,9 +31,27 @@ def course_list_view(request):
 
 def course_detail_view(request, id):
     course = get_objects(Course, id=id)
+    announcements = filter_objects(Announcement, course=course).order_by('-date_created')
+
+    if request.method == 'POST':
+        form = AnnounceForm(request.POST)
+
+        if form.is_valid():
+            announcement_create(
+                course=course,
+                author=request.user,
+                announcement=form.cleaned_data['announcement'],
+                is_limited=form.cleaned_data['is_limited'],
+            )
+
+            return redirect(f'/course/{course.id}')
+    else:
+        form = AnnounceForm()
 
     context = {
         'course': course,
+        'form': form,
+        'announcements': announcements,
     }
 
     return render(request, 'course/course_detail.html', context)
