@@ -1,13 +1,12 @@
 from django.shortcuts import render, redirect
-from django.core.exceptions import ObjectDoesNotExist
-from .models import Course
-from .forms import CourseForm
+from .models import Course, Member
+from .forms import (CourseForm, CourseJoinForm)
 from .services import (
     course_create, 
     member_create,
     course_filter_by_user
 )
-from services import (all_objects, get_objects)
+from services import (all_objects, filter_objects, get_objects)
 
 from random import randint
 
@@ -77,3 +76,31 @@ def course_create_view(request):
 
     return render(request, 'course/course_create.html', context)
 
+def course_join_view(request):
+    if request.method == 'POST':
+        form = CourseJoinForm(request.POST)
+
+        if form.is_valid():
+            course = get_objects(Course, course_code=form.cleaned_data['course_code'])
+            member = filter_objects(
+                Member,
+                user=request.user,
+                course=course,
+            )
+            
+            if len(member) == 0:
+                member_create(
+                    user=request.user,
+                    course=course,
+                    role='STUDENT',
+                )
+
+            return redirect(f'/course/{course.id}/')
+    else:
+        form = CourseJoinForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'course/course_join.html', context)
