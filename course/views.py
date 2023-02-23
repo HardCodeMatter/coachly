@@ -31,6 +31,8 @@ def course_list_view(request):
 
 def course_detail_view(request, id):
     course = get_objects(Course, id=id)
+    teachers = filter_objects(Member, course=course, role='TEACHER')
+    students = filter_objects(Member, course=course, role='STUDENT')
     announcements = filter_objects(Announcement, course=course).order_by('-date_created')
 
     if request.method == 'POST':
@@ -50,6 +52,8 @@ def course_detail_view(request, id):
 
     context = {
         'course': course,
+        'teachers': teachers,
+        'students': students,
         'form': form,
         'announcements': announcements,
     }

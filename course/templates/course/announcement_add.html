@@ -1,0 +1,17 @@
+{% load crispy_forms_tags %}
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    <div class="col d-grid gap-3">
+        <div class="row" rows="3">
+            {{ form.announcement|as_crispy_field }}
+        </div>
+    
+        <div class="row">
+            {{ form.is_limited|as_crispy_field }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Publish</button>
+</form>

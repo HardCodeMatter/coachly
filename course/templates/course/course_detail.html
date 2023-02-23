@@ -21,14 +21,18 @@
 
         <div class="row mt-3">
             <div class="col-2 col-md-3 col-lg-2">
-                <div class="bg-white rounded border p-3 mb-3">
-                    <small class="text-muted">Course code</small><br />
-                    <b>{{ course.course_code }}</b>
-                </div>
+                {% for teacher in teachers %}
+                    {% if teacher.user_id == user.id %}
+                        <div class="bg-white rounded border p-3 mb-3">
+                            <small class="text-muted">Course code</small><br />
+                            <b>{{ course.course_code }}</b>
+                        </div>
+                    {% endif %}
+                {% endfor %}
 
                 <div class="bg-white rounded border p-3">
                     <small class="text-muted">Students</small><br />
-                    <b>1</b>
+                    <b>{{ students.count }}</b>
                 </div>
             </div>
 
@@ -41,21 +45,7 @@
                     </div>
             
                     <div class="collapse list-group-item" id="collapseExample">
-                        <form action="" method="post">
-                            {% csrf_token %}
-    
-                            <div class="col d-grid gap-3">
-                                <div class="row" rows="3">
-                                    {{ form.announcement|as_crispy_field }}
-                                </div>
-                            
-                                <div class="row">
-                                    {{ form.is_limited|as_crispy_field }}
-                                </div>
-                            </div>
-    
-                            <button type="submit" class="btn btn-primary">Publish</button>
-                        </form>
+                        {% include 'course/announcement_add.html' %}
                     </div>
                 </div>
 
