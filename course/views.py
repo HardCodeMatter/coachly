@@ -15,7 +15,10 @@ from .services import (
     course_filter_by_user,
     announcement_create
 )
-from services import (all_objects, filter_objects, get_objects)
+from services import (
+    filter_objects, 
+    get_objects
+)
 
 from random import randint
 
@@ -43,7 +46,7 @@ def course_detail_view(request, id):
                 course=course,
                 author=request.user,
                 announcement=form.cleaned_data['announcement'],
-                is_limited=form.cleaned_data['is_limited'],
+                is_limited=form.cleaned_data['is_limited']
             )
 
             return redirect(f'/course/{course.id}')
@@ -135,3 +138,16 @@ def course_join_view(request):
     }
 
     return render(request, 'course/course_join.html', context)
+
+
+def announcement_delete_view(request, id):
+    course = get_objects(Course, announcement=id)
+    teachers = filter_objects(Member, course=course, role='TEACHER')
+
+    for teacher in teachers:
+        if teacher.user == request.user:
+            get_objects(Announcement, id=id).delete()
+        else:
+            filter_objects(Announcement, id=id, author=request.user).delete()
+    
+    return redirect(f'/course/{course.id}')

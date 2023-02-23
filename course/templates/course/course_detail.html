@@ -69,6 +69,20 @@
                             <div class="lh-sm mt-2 mb-2">
                                 <small>{{ announcement.announcement }}</small>
                             </div>
+
+                            <div class="d-flex justify-content-end gap-2">
+                                <small><a class="text-decoration-none" href="#">Edit</a></small>
+                                
+                                {% for teacher in teachers %}
+                                    {% if teacher.user == user or announcement.author == user %}
+                                        <small>
+                                            <a class="text-danger text-decoration-none" href="{% url 'announcement_delete' announcement.pk %}">
+                                                Delete
+                                            </a>
+                                        </small>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
