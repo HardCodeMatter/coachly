@@ -2,7 +2,8 @@ from django.contrib import admin
 from .models import (
     Course,
     Member,
-    Announcement
+    Announcement,
+    Task
 )
 
 
@@ -61,4 +62,28 @@ class AnnouncementAdmin(admin.ModelAdmin):
     ]
 
     search_fields = ('id', 'course', 'author', 'is_limited', 'date_created',)
+    ordering = ('-id',)
+
+
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ('name', 'course', 'author', 'date_created', 'points',)
+    list_filter = ('name', 'course', 'author', 'date_created', 'points',)
+
+    fieldsets = [
+        (None, {
+            'fields': ('name', 'description',),
+        }),
+        ('Belongs', {
+            'fields': ('author', 'course',),
+        }),
+        ('Date and points', {
+            'fields': ('date_created', 'date_due', 'points',),
+        }),
+        ('Status', {
+            'fields': ('is_active',),
+        }),
+    ]
+
+    search_fields = ('name', 'course', 'author', 'date_created', 'points',)
     ordering = ('-id',)

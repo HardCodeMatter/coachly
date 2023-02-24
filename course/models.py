@@ -62,3 +62,22 @@ class Announcement(models.Model):
 
     def __str__(self) -> str:
         return f'Announcement {self.pk}'
+
+
+class Task(models.Model):
+    name = models.CharField(('name'), max_length=100)
+    description = models.TextField(('description'), max_length=500, blank=True, null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(('data created'), default=timezone.now)
+    date_due = models.DateField(('due date'), blank=True, null=True)
+    points = models.IntegerField(('points'), blank=True, null=True)
+    
+    is_active = models.BooleanField(
+        ('active'),
+        default=True,
+        help_text='Indicates a task that has an active status.'
+    )
+
+    def __str__(self):
+        return f'{self.name}'

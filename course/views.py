@@ -2,18 +2,21 @@ from django.shortcuts import render, redirect
 from .models import (
     Course,
     Member,
-    Announcement
+    Announcement,
+    Task
 )
 from .forms import (
     CourseForm, 
     CourseJoinForm,
-    AnnounceForm
+    AnnounceForm,
+    TaskForm
 )
 from .services import (
     course_create, 
     member_create,
     course_filter_by_user,
-    announcement_create
+    announcement_create,
+    task_create
 )
 from services import (
     filter_objects, 
@@ -49,7 +52,7 @@ def course_detail_view(request, id):
                 is_limited=form.cleaned_data['is_limited']
             )
 
-            return redirect(f'/course/{course.id}')
+            return redirect(f'/course/{course.id}/')
     else:
         form = AnnounceForm()
 
@@ -151,3 +154,50 @@ def announcement_delete_view(request, id):
             filter_objects(Announcement, id=id, author=request.user).delete()
     
     return redirect(f'/course/{course.id}')
+
+
+def task_list_view(request, id):
+    course = get_objects(Course, id=id)
+    tasks = filter_objects(Task, course=course)
+
+    context = {
+        'tasks': tasks,
+    }
+
+    return render(request, 'course/task_list.html', context)
+
+def task_detail_view(request, course_id, task_id):
+    course = get_objects(Course, id=course_id)
+    task = get_objects(Task, id=task_id, course=course)
+
+    context = {
+        'task': task,
+    }
+
+    return render(request, 'course/task_detail.html', context)
+
+def task_create_view(request, id):
+    course = get_objects(Course, id=id)
+
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+
+        if form.is_valid():
+            task = task_create(
+                name=form.cleaned_data['name'],
+                description=form.cleaned_data['description'],
+                author=request.user,
+                course=course,
+                date_due=form.cleaned_data['date_due'],
+                points=form.cleaned_data['points'],
+            )
+
+            return redirect(f'/course/{course.id}/task/{task.id}')
+    else:
+        form = TaskForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'course/task_create.html', context)

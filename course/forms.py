@@ -1,5 +1,9 @@
 from django import forms
-from .models import Course, Announcement
+from .models import (
+    Course, 
+    Announcement,
+    Task
+)
 from django.core.validators import (
     MinValueValidator, 
     MaxValueValidator
@@ -20,3 +24,9 @@ class AnnounceForm(forms.ModelForm):
     class Meta:
         model = Announcement
         fields = ('announcement', 'is_limited',)
+
+
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ('name', 'description', 'date_due', 'points',)

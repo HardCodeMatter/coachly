@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="accordion" id="accordionTaskList">
+            {% for task in tasks %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading-{{ task.id }}">
+                        <button class="accordion-button collapsed d-block" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ task.id }}" aria-expanded="false" aria-controls="collapse-{{ task.id }}">
+                            <div class="d-flex justify-content-between">
+                                <div class="">{{ task.name }}</div>
+                                <small class="text-muted">
+                                    {% if task.date_due %}
+                                        Due {{ task.date_due|date:'M j' }}
+                                    {% else %}
+                                        No due date
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </button>
+                    </h2>
+                    <div id="collapse-{{ task.id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ task.id }}" data-bs-parent="#accordionTaskList">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="text-muted">
+                                        <small>Posted {{ task.date_created|date:'M j' }}</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <small>{{ task.description }}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div>
+                            <a href="{% url 'task_detail' task.course_id task.id %}" class="btn btn-sm btn-outline-primary mb-3 ms-3">View task</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,7 +1,8 @@
 from .models import (
     Course,
     Member,
-    Announcement
+    Announcement,
+    Task
 )
 
 
@@ -16,3 +17,6 @@ def member_create(**kwargs):
 
 def announcement_create(**kwargs):
     return Announcement.objects.create(**kwargs)
+
+def task_create(**kwargs):
+    return Task.objects.create(**kwargs)
