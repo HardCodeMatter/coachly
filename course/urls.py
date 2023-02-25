@@ -13,5 +13,6 @@ urlpatterns = [
 
     path('course/<int:id>/task/', views.task_list_view, name='task_list'),
     path('course/<int:course_id>/task/<int:task_id>/', views.task_detail_view, name='task_detail'),
+    path('course/<int:course_id>/task/<int:task_id>/edit/', views.task_edit_view, name='task_edit'),
     path('course/<int:id>/task/create/', views.task_create_view, name='task_create'),
 ]

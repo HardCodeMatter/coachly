@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+
 from .models import (
     Course,
     Member,
@@ -26,6 +28,7 @@ from services import (
 from random import randint
 
 
+@login_required
 def course_list_view(request):
     members = course_filter_by_user(request.user)
 
@@ -35,6 +38,7 @@ def course_list_view(request):
 
     return render(request, 'course/course_list.html', context)
 
+@login_required
 def course_detail_view(request, id):
     course = get_objects(Course, id=id)
     teachers = filter_objects(Member, course=course, role='TEACHER')
@@ -66,6 +70,7 @@ def course_detail_view(request, id):
 
     return render(request, 'course/course_detail.html', context)
 
+@login_required
 def course_edit_view(request, id):
     course = get_objects(Course, id=id)
 
@@ -80,11 +85,13 @@ def course_edit_view(request, id):
         form = CourseForm(instance=course)
 
     context = {
+        'course': course,
         'form': form,
     }
 
     return render(request, 'course/course_edit.html', context)
 
+@login_required
 def course_create_view(request):
     if request.method == 'POST':
         form = CourseForm(request.POST, request.FILES)
@@ -113,6 +120,7 @@ def course_create_view(request):
 
     return render(request, 'course/course_create.html', context)
 
+@login_required
 def course_join_view(request):
     if request.method == 'POST':
         form = CourseJoinForm(request.POST)
@@ -143,6 +151,7 @@ def course_join_view(request):
     return render(request, 'course/course_join.html', context)
 
 
+@login_required
 def announcement_delete_view(request, id):
     course = get_objects(Course, announcement=id)
     teachers = filter_objects(Member, course=course, role='TEACHER')
@@ -156,16 +165,20 @@ def announcement_delete_view(request, id):
     return redirect(f'/course/{course.id}')
 
 
+@login_required
 def task_list_view(request, id):
     course = get_objects(Course, id=id)
+    teacher = get_objects(Member, user=request.user, course=course, role='TEACHER')
     tasks = filter_objects(Task, course=course)
 
     context = {
+        'teacher': teacher,
         'tasks': tasks,
     }
 
     return render(request, 'course/task_list.html', context)
 
+@login_required
 def task_detail_view(request, course_id, task_id):
     course = get_objects(Course, id=course_id)
     task = get_objects(Task, id=task_id, course=course)
@@ -176,6 +189,36 @@ def task_detail_view(request, course_id, task_id):
 
     return render(request, 'course/task_detail.html', context)
 
+@login_required
+def task_edit_view(request, course_id, task_id):
+    course = get_objects(Course, id=course_id)
+    task = get_objects(Task, id=task_id)
+
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+
+        if form.is_valid():
+            object = form.save(commit=False)
+            object.name = form.cleaned_data['name']
+            object.description = form.cleaned_data['description']
+            object.date_due = form.cleaned_data['date_due']
+            object.points = form.cleaned_data['points']
+            
+            object.save()
+
+            return redirect(f'/course/{course.id}/task/{task.id}/')
+    else:
+        form = TaskForm(instance=task)
+
+    context = {
+        'course': course,
+        'task': task,
+        'form': form,
+    }
+
+    return render(request, 'course/task_edit.html', context)
+
+@login_required
 def task_create_view(request, id):
     course = get_objects(Course, id=id)
 
@@ -197,6 +240,7 @@ def task_create_view(request, id):
         form = TaskForm()
 
     context = {
+        'course': course,
         'form': form,
     }
 
