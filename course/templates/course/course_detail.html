@@ -70,10 +70,16 @@
                                 <small>{{ announcement.announcement }}</small>
                             </div>
 
-                            <div class="d-flex justify-content-end gap-2">
-                                <small><a class="text-decoration-none" href="#">Edit</a></small>
-                                
+                            <div class="d-flex justify-content-end gap-2">                                
                                 {% for teacher in teachers %}
+                                    {% if teacher.user == user %}
+                                        <small>
+                                            <a class="text-primary text-decoration-none" href="#">
+                                                Edit
+                                            </a>
+                                        </small>
+                                    {% endif %}
+
                                     {% if teacher.user == user or announcement.author == user %}
                                         <small>
                                             <a class="text-danger text-decoration-none" href="{% url 'announcement_delete' announcement.pk %}">

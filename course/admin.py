@@ -3,8 +3,13 @@ from .models import (
     Course,
     Member,
     Announcement,
-    Task
+    Task,
+    Grade
 )
+
+class GradeInline(admin.StackedInline):
+    model = Grade
+    extra = 0
 
 
 @admin.register(Course)
@@ -85,5 +90,28 @@ class TaskAdmin(admin.ModelAdmin):
         }),
     ]
 
+    inlines = [GradeInline]
+
     search_fields = ('name', 'course', 'author', 'date_created', 'points',)
+    ordering = ('-id',)
+
+
+@admin.register(Grade)
+class GradeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'task', 'grade', 'date_assigned',)
+    list_filter = ('user', 'task', 'grade', 'date_assigned',)
+
+    fieldsets = [
+        ('Belongs', {
+            'fields': ('user', 'course', 'task',),
+        }),
+        ('Grades', {
+            'fields': ('grade',),
+        }),
+        ('Date', {
+            'fields': ('date_assigned',),
+        }),
+    ]
+
+    search_fields = ('user', 'task', 'grade', 'date_assigned',)
     ordering = ('-id',)

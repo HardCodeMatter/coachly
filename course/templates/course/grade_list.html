@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="accordion" id="accordionTaskList">
+            {% for task in tasks %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading-{{ task.id }}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ task.id }}" aria-expanded="false" aria-controls="collapse-{{ task.id }}">
+                            {{ task.name }}
+                        </button>
+                    </h2>
+                    <div id="collapse-{{ task.id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ task.id }}" data-bs-parent="#accordionTaskList">
+                        <div class="accordion-body">
+                            <div class="d-grid gap-3">
+                                {% for grade in grades %}
+                                    {% if grade.task_id == task.id %}
+                                        <div class="row">
+                                            <div class="col">
+                                                <div>
+                                                    {{ grade.user }}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-2">
+                                                <div class="float-end text-success">
+                                                    {{ grade.grade }}<small class="text-dark"> / {{ task.points }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

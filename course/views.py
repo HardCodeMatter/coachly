@@ -5,7 +5,8 @@ from .models import (
     Course,
     Member,
     Announcement,
-    Task
+    Task,
+    Grade
 )
 from .forms import (
     CourseForm, 
@@ -21,6 +22,7 @@ from .services import (
     task_create
 )
 from services import (
+    all_objects,
     filter_objects, 
     get_objects
 )
@@ -245,3 +247,17 @@ def task_create_view(request, id):
     }
 
     return render(request, 'course/task_create.html', context)
+
+
+@login_required
+def grade_list_view(request, id):
+    course = get_objects(Course, id=id)
+    tasks = filter_objects(Task, course=course)
+    grades = filter_objects(Grade, course=course)
+
+    context = {
+        'tasks': tasks,
+        'grades': grades,
+    }
+
+    return render(request, 'course/grade_list.html', context)
