@@ -3,7 +3,9 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <div>
+    <div class="container">
+        {% include "navbar.html" %}
+
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
 

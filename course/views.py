@@ -174,6 +174,7 @@ def task_list_view(request, id):
     tasks = filter_objects(Task, course=course)
 
     context = {
+        'course': course,
         'teacher': teacher,
         'tasks': tasks,
     }
@@ -186,6 +187,7 @@ def task_detail_view(request, course_id, task_id):
     task = get_objects(Task, id=task_id, course=course)
 
     context = {
+        'course': course,
         'task': task,
     }
 
@@ -256,6 +258,7 @@ def grade_list_view(request, id):
     grades = filter_objects(Grade, course=course)
 
     context = {
+        'course': course,
         'tasks': tasks,
         'grades': grades,
     }
