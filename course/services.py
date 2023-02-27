@@ -2,7 +2,8 @@ from .models import (
     Course,
     Member,
     Announcement,
-    Task
+    Task,
+    Grade
 )
 
 
@@ -20,3 +21,6 @@ def announcement_create(**kwargs):
 
 def task_create(**kwargs):
     return Task.objects.create(**kwargs)
+
+def grade_create(**kwargs):
+    return Grade.objects.create(**kwargs)

@@ -36,7 +36,13 @@
 
                             <div class="row">
                                 <div class="col">
-                                    <small>{{ task.description }}</small>
+                                    <small>
+                                        {% if task.description %}
+                                            {{ task.description }}
+                                        {% else %}
+                                            No description.
+                                        {% endif %}
+                                    </small>
                                 </div>
                             </div>
                         </div>

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="container">
+        {% include "navbar.html" %}
+
+        <div class="list-group">
+            <form action="" method="post">
+                {% csrf_token %}
+                
+                <div class="list-group-item rounded-top">
+                    <div class="row">
+                        <label for="staticUser" class="col-sm-2 col-form-label">Student</label>
+                        <div class="col">
+                            <input type="text" readonly class="form-control-plaintext text-muted" id="staticUser" value="{{ grade.user }}">
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <label for="staticTask" class="col-sm-2 col-form-label">Task</label>
+                        <div class="col">
+                            <input type="text" readonly class="form-control-plaintext text-muted" id="staticTask" value="{{ grade.task }}">
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="list-group-item rounded-bottom">
+                    <div class="row mb-3">
+                        {{ form.grade|as_crispy_field }}
+                    </div>
+        
+                    <div class="mb-2">
+                        <button class="btn btn-sm btn-primary">Assign</button>
+                        <a href="{% url 'grade_list' course.id %}" class="btn btn-sm btn-outline-danger">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

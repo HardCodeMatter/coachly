@@ -20,7 +20,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="">Members</a>
+                <a class="nav-link
+                    {% if 'member' in request.path %}
+                        active
+                    {% endif %}" 
+                    href="{% url 'member_list' course.id %}">
+                    Members
+                </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link
@@ -28,7 +34,7 @@
                         active
                     {% endif %}" 
                     href="{% url 'grade_list' course.id %}">
-                    Tasks
+                    Grade
                 </a>
             </li>
         </ul>

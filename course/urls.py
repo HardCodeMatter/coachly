@@ -17,4 +17,7 @@ urlpatterns = [
     path('course/<int:id>/task/create/', views.task_create_view, name='task_create'),
 
     path('course/<int:id>/grade/', views.grade_list_view, name='grade_list'),
+    path('course/<int:course_id>/grade/<int:grade_id>/edit/', views.grade_edit_view, name='grade_edit'),
+
+    path('course/<int:id>/member/', views.member_list_view, name='member_list'),
 ]

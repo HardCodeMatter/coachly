@@ -87,7 +87,7 @@ class Grade(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    grade = models.IntegerField(('grade'))
+    grade = models.IntegerField(('grade'), null=True)
     date_assigned = models.DateTimeField(('date assigned'), default=timezone.now)
 
     def __str__(self):

@@ -12,14 +12,16 @@ from .forms import (
     CourseForm, 
     CourseJoinForm,
     AnnounceForm,
-    TaskForm
+    TaskForm,
+    GradeForm
 )
 from .services import (
     course_create, 
     member_create,
     course_filter_by_user,
     announcement_create,
-    task_create
+    task_create,
+    grade_create
 )
 from services import (
     all_objects,
@@ -171,7 +173,7 @@ def announcement_delete_view(request, id):
 def task_list_view(request, id):
     course = get_objects(Course, id=id)
     teacher = get_objects(Member, user=request.user, course=course, role='TEACHER')
-    tasks = filter_objects(Task, course=course)
+    tasks = filter_objects(Task, course=course).order_by('-date_created')
 
     context = {
         'course': course,
@@ -185,10 +187,12 @@ def task_list_view(request, id):
 def task_detail_view(request, course_id, task_id):
     course = get_objects(Course, id=course_id)
     task = get_objects(Task, id=task_id, course=course)
+    student = get_objects(Member, user=request.user, course=course, role='STUDENT')
 
     context = {
         'course': course,
         'task': task,
+        'student': student,
     }
 
     return render(request, 'course/task_detail.html', context)
@@ -225,6 +229,7 @@ def task_edit_view(request, course_id, task_id):
 @login_required
 def task_create_view(request, id):
     course = get_objects(Course, id=id)
+    members = filter_objects(Member, course=course, role='STUDENT')
 
     if request.method == 'POST':
         form = TaskForm(request.POST)
@@ -238,6 +243,13 @@ def task_create_view(request, id):
                 date_due=form.cleaned_data['date_due'],
                 points=form.cleaned_data['points'],
             )
+            
+            for member in members:
+                grade_create(
+                    user=member.user,
+                    course=course,
+                    task=task,
+                )
 
             return redirect(f'/course/{course.id}/task/{task.id}')
     else:
@@ -254,7 +266,7 @@ def task_create_view(request, id):
 @login_required
 def grade_list_view(request, id):
     course = get_objects(Course, id=id)
-    tasks = filter_objects(Task, course=course)
+    tasks = filter_objects(Task, course=course).order_by('-date_created')
     grades = filter_objects(Grade, course=course)
 
     context = {
@@ -264,3 +276,48 @@ def grade_list_view(request, id):
     }
 
     return render(request, 'course/grade_list.html', context)
+
+@login_required
+def grade_edit_view(request, course_id, grade_id):
+    course = get_objects(Course, id=course_id)
+    grade = get_objects(Grade, id=grade_id)
+    task = get_objects(Task, id=grade.task_id)
+
+    if request.method == 'POST':
+        form = GradeForm(request.POST)
+
+        if form.is_valid():
+            Grade.objects.filter(
+                course=course, 
+                user=grade.user, 
+                task=task
+            ).update(
+                grade=form.cleaned_data['grade']
+            )
+
+            return redirect(f'/course/{course.id}/grade/')
+    else:
+        form = GradeForm()
+
+    context = {
+        'course': course,
+        'grade': grade,
+        'form': form,
+    }
+
+    return render(request, 'course/grade_edit.html', context)
+
+
+@login_required
+def member_list_view(request, id):
+    course = get_objects(Course, id=id)
+    teachers = filter_objects(Member, course=course, role='TEACHER')
+    students = filter_objects(Member, course=course, role='STUDENT')
+
+    context = {
+        'course': course,
+        'teachers': teachers,
+        'students': students,
+    }
+
+    return render(request, 'course/member_list.html', context)

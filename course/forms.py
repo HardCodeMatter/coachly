@@ -2,7 +2,8 @@ from django import forms
 from .models import (
     Course, 
     Announcement,
-    Task
+    Task,
+    Grade
 )
 from django.core.validators import (
     MinValueValidator, 
@@ -30,3 +31,9 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ('name', 'description', 'date_due', 'points',)
+
+
+class GradeForm(forms.ModelForm):
+    class Meta:
+        model = Grade
+        fields = ('grade',)
