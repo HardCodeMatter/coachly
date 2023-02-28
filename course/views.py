@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 from .models import (
     Course,
@@ -268,11 +269,14 @@ def grade_list_view(request, id):
     course = get_objects(Course, id=id)
     tasks = filter_objects(Task, course=course).order_by('-date_created')
     grades = filter_objects(Grade, course=course)
+    
+    date_today = timezone.now
 
     context = {
         'course': course,
         'tasks': tasks,
         'grades': grades,
+        'date_today': date_today,
     }
 
     return render(request, 'course/grade_list.html', context)
