@@ -252,7 +252,7 @@ def task_create_view(request, id):
                     task=task,
                 )
 
-            return redirect(f'/course/{course.id}/task/{task.id}')
+            return redirect(f'/course/{course.id}/task/{task.id}/')
     else:
         form = TaskForm()
 

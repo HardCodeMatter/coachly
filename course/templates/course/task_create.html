@@ -19,9 +19,12 @@
                 </div>
 
                 <div class="row">
+                    <small>{{ form|as_crispy_errors }}</small>
+
                     <div class="col">
                         {{ form.date_due|as_crispy_field }}
                     </div>
+
                     <div class="col">
                         {{ form.points|as_crispy_field }}
                     </div>

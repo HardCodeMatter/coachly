@@ -32,6 +32,14 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ('name', 'description', 'date_due', 'points',)
 
+    def clean(self):
+        data = self.cleaned_data
+
+        if data['date_due'] and not data['points']:
+            raise forms.ValidationError('You must specify points if you use date due.')
+
+        return data
+
 
 class GradeForm(forms.ModelForm):
     class Meta:
