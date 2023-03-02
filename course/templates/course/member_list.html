@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="list-group mb-3">
+            {% for teacher in teachers %}
+                <div class="list-group-item d-flex justify-content-between p-3">
+                    <div>
+                        {{ teacher.user }}
+                        {% if course.author == teacher.user %}
+                            <i class="bi bi-star-fill text-primary"></i>
+                        {% endif %}
+                    </div>
+                    <small class="text-muted">
+                        {{ teacher.role.title }}
+                    </small>
+                </div>
+            {% endfor %}
+
+            {% for student in students %}
+                <div class="list-group-item d-flex justify-content-between p-3">
+                    <div>{{ student.user }}</div>
+                    <small class="text-muted">{{ student.role.title }}</small>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

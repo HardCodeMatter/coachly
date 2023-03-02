@@ -1,0 +1,143 @@
+<div class="d-flex justify-content-between m-3">
+    <div class="d-flex">
+        <div>
+            <button class="btn btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                <i class="fs-4 bi bi-list"></i>
+            </button>
+              
+            <div class="offcanvas offcanvas-start" style="width: 300px;" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+                        <span class="text-primary">e</span>Coachly
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+
+                <div class="offcanvas-body">
+                    <div class="d-flex flex-column gap-2">
+                        <a class="btn btn-sm btn-outline-primary w-100 text-start" href="{% url 'course_list' %}">Courses</a>
+                        <a class="btn btn-sm btn-outline-dark w-100 text-start disabled" href="#">Challenges</a>
+
+                        <small class="text-muted fw-bold mt-4">Other</small>
+                        <a class="btn btn-sm btn-outline-dark w-100 text-start disabled" href="#">Archived courses</a>
+
+                        <small class="text-muted fw-bold mt-4">About</small>
+                        <a class="btn btn-sm btn-outline-dark w-100 text-start disabled" href="#">Overview</a>
+                    </div>
+                </div>
+
+                <div class="offcanvas-footer">
+                    <div class="d-flex justify-content-center gap-3 mb-3">
+                        <a href="https://github.com/hardline-dev/">
+                            <i class="text-dark fs-2 bi bi-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/hardline-dev/">
+                            <i class="text-dark fs-2 bi bi-linkedin"></i>
+                        </a>
+                        <a href="https://t.me/hardline_dev/">
+                            <i class="text-dark fs-2 bi bi-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if course %}
+            <div class="fw-bold d-flex align-items-center">
+                {% if course.is_premium %}
+                    <i class="bi bi-patch-check-fill text-primary me-1"></i>
+                {% endif %}
+                {{ course.name }}
+            </div>
+        {% else %}
+            <div class="fw-bold d-flex align-items-center">
+                <span class="text-primary">e</span>Coachly
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="d-flex align-items-center">
+        {% if course and course.author == user %}
+            <div class="me-2">
+                <a class="btn btn-sm btn-outline-primary" href="{% url 'course_edit' course.id %}">
+                    <i class="bi bi-sliders2"></i>
+                </a>
+            </div>
+        {% endif %}
+
+        {% if not course %}
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'course_create' %}">Create course</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'course_join' %}">Join course</a>
+                    </li>
+                </ul>
+                
+                <div class="modal fade text-dark" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="logoutModalLabel">Log out</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to log out?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a class="btn btn-outline-danger" href="{% url 'logout' %}">Log out</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div>
+            {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <button class="btn btn-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ user.first_name }} {{ user.last_name }}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="">Profile</a></li>
+                        <li><a class="dropdown-item disabled" href="#">Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                                Log out
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="modal fade text-dark" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="logoutModalLabel">Log out</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to log out?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <a class="btn btn-outline-danger" href="{% url 'logout' %}">Log out</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <a class="btn btn-outline-primary" href="{% url 'login' %}">Log in</a>
+                <a class="btn btn-primary" href="/register/">Sign up</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
