@@ -79,6 +79,9 @@ def course_detail_view(request, id):
 def course_edit_view(request, id):
     course = get_objects(Course, id=id)
 
+    if request.user != course.author:
+        return redirect(f'/course/{course.id}/')
+
     if request.method == 'POST':
         form = CourseForm(request.POST, request.FILES, instance=course)
 
@@ -203,6 +206,9 @@ def task_edit_view(request, course_id, task_id):
     course = get_objects(Course, id=course_id)
     task = get_objects(Task, id=task_id)
 
+    if request.user != course.author:
+        return redirect(f'/course/{course.id}/task/{task.id}/')
+
     if request.method == 'POST':
         form = TaskForm(request.POST, instance=task)
 
@@ -231,6 +237,9 @@ def task_edit_view(request, course_id, task_id):
 def task_create_view(request, id):
     course = get_objects(Course, id=id)
     members = filter_objects(Member, course=course, role='STUDENT')
+
+    if request.user != course.author:
+        return redirect(f'/course/{course.id}/task/')
 
     if request.method == 'POST':
         form = TaskForm(request.POST)
@@ -263,12 +272,24 @@ def task_create_view(request, id):
 
     return render(request, 'course/task_create.html', context)
 
+@login_required
+def task_delete_view(request, course_id, task_id):
+    course = get_objects(Course, id=course_id)
+    teachers = filter_objects(Member, course=course, role='TEACHER')
+
+    for teacher in teachers:
+        if teacher.user == request.user:
+            get_objects(Task, id=task_id).delete()
+
+    return redirect(f'/course/{course.id}/task/')
+
 
 @login_required
 def grade_list_view(request, id):
     course = get_objects(Course, id=id)
     tasks = filter_objects(Task, course=course).order_by('-date_created')
     grades = filter_objects(Grade, course=course)
+    teacher = get_objects(Member, user=request.user, course=course, role='TEACHER')
     
     date_today = timezone.now
 
@@ -276,6 +297,7 @@ def grade_list_view(request, id):
         'course': course,
         'tasks': tasks,
         'grades': grades,
+        'teacher': teacher,
         'date_today': date_today,
     }
 
@@ -286,6 +308,9 @@ def grade_edit_view(request, course_id, grade_id):
     course = get_objects(Course, id=course_id)
     grade = get_objects(Grade, id=grade_id)
     task = get_objects(Task, id=grade.task_id)
+
+    if request.user != course.author:
+        return redirect(f'/course/{course.id}/grade/')
 
     if request.method == 'POST':
         form = GradeForm(request.POST)

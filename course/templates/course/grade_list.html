@@ -53,10 +53,12 @@
                                                         <small class="text-muted">N/A</small>
                                                     {% elif task.date_due and date_today|date:'M j' >= task.date_due|date:'M j' %}
                                                         <small class="text-danger">Missing</small>
-                                                    {% else %}
+                                                    {% elif teacher %}
                                                         <a href="{% url 'grade_edit' course.id grade.id %}" class="btn btn-sm btn-outline-primary">
                                                             Assign
                                                         </a>
+                                                    {% else %}
+                                                        <small class="text-muted">N/A</small>
                                                     {% endif %}
                                                 </div>
                                             </div>

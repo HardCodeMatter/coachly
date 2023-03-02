@@ -4,6 +4,12 @@
     <div class="container">
         {% include "navbar.html" %}
 
+        {% if teacher %}
+            <a class="btn btn-sm btn-primary mb-3" href="{% url 'task_create' course.id %}">
+                Create
+            </a>
+        {% endif %}
+
         <div class="accordion" id="accordionTaskList">
             {% for task in tasks %}
                 <div class="accordion-item">
@@ -57,7 +63,7 @@
                             {% if teacher %}
                                 <div>
                                     <a href="{% url 'task_edit' task.course_id task.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                    <a href="{% url 'task_edit' task.course_id task.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                                    <a href="{% url 'task_delete' task.course_id task.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
                                 </div>
                             {% endif %}
                         </div>

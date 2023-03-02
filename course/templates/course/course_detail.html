@@ -9,14 +9,19 @@
         <div class="card text-bg-dark" style="width: 100%; height: 240px;">
             <img src="{{ course.image.url }}" class="card-img h-100" alt="...">
             <div class="card-img-overlay">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between align-items-center">
                     <h4 class="card-title">
                         {% if course.is_premium %}
                             <i class="bi bi-patch-check-fill text-primary"></i>
                         {% endif %}
                         {{ course.name }}
                     </h4>
-                    <a href="{% url 'course_edit' course.id %}" class="btn btn-sm bg-white text-dark"><i class="bi bi-pencil me-2"></i>Setting</a>
+                    
+                    {% if course.author == user %}
+                        <a href="{% url 'course_edit' course.id %}" class="btn btn-sm bg-white text-dark">
+                            <i class="bi bi-pencil me-2"></i>Setting
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -41,7 +46,10 @@
             <div class="col col-sm-12 col-md">
                 <div class="list-group">
                     <div class="list-group-item">
-                        <p class="m-2 text-muted"><i class="bi bi-pencil me-2"></i>Write a message for your course.</p>
+                        <p class="m-2 text-muted">
+                            <i class="bi bi-pencil me-2"></i>
+                            <small>Write a message for your course</small>
+                        </p>
                     
                         <a class="stretched-link" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"></a>
                     </div>

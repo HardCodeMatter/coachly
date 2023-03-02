@@ -1,36 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
-        {% if members %}
-            {% for member in members %}
-                <div class="col">
-                    <div class="card">
-                        <img src="{{ member.course.image.url }}" class="card-img-top" style="height: 120px;" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title text-truncate">
-                                {% if member.course.is_premium %}
-                                    <i class="bi bi-patch-check-fill text-primary"></i>
-                                {% endif %}
-                                {{ member.course.name }}
-                            </h5>
-                            <p class="card-text text-muted">Author: {{ member.course.author }}</p>
-                        </div>
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
+            {% if members %}
+                {% for member in members %}
+                    <div class="col">
+                        <div class="card">
+                            <img src="{{ member.course.image.url }}" class="card-img-top" style="height: 120px;" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title text-truncate">
+                                    {% if member.course.is_premium %}
+                                        <i class="bi bi-patch-check-fill text-primary"></i>
+                                    {% endif %}
+                                    {{ member.course.name }}
+                                </h5>
+                                <p class="card-text text-muted">Author: {{ member.course.author }}</p>
+                            </div>
 
-                        <a href="{% url 'course_detail' member.course.id %}" class="stretched-link"></a>
+                            <a href="{% url 'course_detail' member.course.id %}" class="stretched-link"></a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="card text-center position-absolute top-0 start-50 translate-middle-x p-3" style="margin-top: 250px;">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Add a course to get started</h6>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="{% url 'course_create' %}" class="btn btn-outline-primary">Create course</a>
+                            <a href="{% url 'course_join' %}" class="btn btn-primary">Join course</a>
+                        </div>
                     </div>
                 </div>
-            {% endfor %}
-        {% else %}
-            <div class="card text-center position-absolute top-0 start-50 translate-middle-x p-3" style="margin-top: 250px;">
-                <div class="card-body">
-                    <h6 class="card-title mb-3">Add a course to get started</h6>
-                    <div class="d-flex justify-content-center gap-2">
-                        <a href="{% url 'course_create' %}" class="btn btn-outline-primary">Create course</a>
-                        <a href="{% url 'course_join' %}" class="btn btn-primary">Join course</a>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
