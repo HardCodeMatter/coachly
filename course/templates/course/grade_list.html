@@ -4,7 +4,13 @@
 
 {% block content %}
     <div class="container">
-        {% include "navbar.html" %}
+        {% if not grades %}
+            <div class="list-group">
+                <div class="list-group-item text-center fw-bold">
+                    Grades were not found
+                </div>
+            </div>
+        {% endif %}
 
         <div class="accordion" id="accordionTaskList">
             {% for task in tasks %}

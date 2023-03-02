@@ -9,10 +9,15 @@
 </head>
 <body>
     <div>
-        <div class="m-3">
+        <div class="">
             {% include 'control_menu.html' %}
+            
+            {% if course %}
+                {% include 'navbar.html' %}
+            {% else %}
+                <hr>
+            {% endif %}
         </div>
-        <hr>
 
         <div class="d-flex justify-content-center">
             {% block content %}{% endblock %}

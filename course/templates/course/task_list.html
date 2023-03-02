@@ -2,12 +2,25 @@
 
 {% block content %}
     <div class="container">
-        {% include "navbar.html" %}
-
-        {% if teacher %}
+        {% if not teacher and not tasks %}
+            <div class="list-group">
+                <div class="list-group-item text-center fw-bold">
+                    Tasks were not found
+                </div>
+            </div>
+        {% elif teacher and tasks %}
             <a class="btn btn-sm btn-primary mb-3" href="{% url 'task_create' course.id %}">
                 Create
             </a>
+        {% elif teacher and not tasks %}
+            <div class="card text-center p-3">
+                <div class="card-body">
+                    <h6 class="card-title mb-3">Create a task to get started</h6>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="{% url 'task_create' course.id %}" class="btn btn-outline-primary">Create</a>
+                    </div>
+                </div>
+            </div>
         {% endif %}
 
         <div class="accordion" id="accordionTaskList">

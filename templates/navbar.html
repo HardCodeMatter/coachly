@@ -1,42 +1,38 @@
-<div class="list-group mb-3">
-    <div class="list-group-item">
-        <ul class="nav nav-pills justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link 
-                    {% if request.resolver_match.url_name == 'course_detail' %}
-                        active
-                    {% endif %}" 
-                    href="{% url 'course_detail' course.id %}">
-                    Announcements
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link
-                    {% if 'task' in request.path %}
-                        active
-                    {% endif %}"
-                    href="{% url 'task_list' course.id %}">
-                    Tasks
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link
-                    {% if 'member' in request.path %}
-                        active
-                    {% endif %}" 
-                    href="{% url 'member_list' course.id %}">
-                    Members
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link
-                    {% if 'grade' in request.path %}
-                        active
-                    {% endif %}" 
-                    href="{% url 'grade_list' course.id %}">
-                    Grade
-                </a>
-            </li>
-        </ul>
-    </div>    
-</div>
+<ul class="nav nav-tabs justify-content-center mt-3 mb-3">
+    <li class="nav-item">
+        <a class="nav-link 
+            {% if request.resolver_match.url_name == 'course_detail' %}
+                active
+            {% endif %}" 
+            href="{% url 'course_detail' course.id %}">
+            Announcements
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link
+            {% if 'task' in request.path %}
+                active
+            {% endif %}"
+            href="{% url 'task_list' course.id %}">
+            Tasks
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link
+            {% if 'member' in request.path %}
+                active
+            {% endif %}" 
+            href="{% url 'member_list' course.id %}">
+            Members
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link
+            {% if 'grade' in request.path %}
+                active
+            {% endif %}" 
+            href="{% url 'grade_list' course.id %}">
+            Grade
+        </a>
+    </li>
+</ul>

@@ -4,10 +4,8 @@
 
 {% block content %}
     <div class="container">
-        {% include "navbar.html" %}
-
         <div class="card text-bg-dark" style="width: 100%; height: 240px;">
-            <img src="{{ course.image.url }}" class="card-img h-100" alt="...">
+            <img src="{{ course.image.url }}" class="card-img h-100" style="object-fit: cover;" alt="...">
             <div class="card-img-overlay">
                 <div class="d-flex justify-content-between align-items-center">
                     <h4 class="card-title">
