@@ -79,7 +79,7 @@ class Task(models.Model):
         help_text='Indicates a task that has an active status.'
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.name}'
 
 
@@ -90,5 +90,16 @@ class Grade(models.Model):
     grade = models.IntegerField(('grade'), null=True)
     date_assigned = models.DateTimeField(('date assigned'), default=timezone.now)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Grade {self.pk}'
+
+
+class File(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    file = models.FileField(('file'), upload_to='course/files/')
+    date_attached = models.DateTimeField(('date attached'), default=timezone.now)
+
+    def __str__(self) -> str:
+        return f'File {self.pk}'

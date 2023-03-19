@@ -3,7 +3,8 @@ from .models import (
     Course, 
     Announcement,
     Task,
-    Grade
+    Grade,
+    File
 )
 from django.core.validators import (
     MinValueValidator, 
@@ -45,3 +46,9 @@ class GradeForm(forms.ModelForm):
     class Meta:
         model = Grade
         fields = ('grade',)
+
+
+class FileForm(forms.ModelForm):
+    class Meta:
+        model = File
+        fields = ('file',)
