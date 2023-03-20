@@ -197,6 +197,7 @@ def task_detail_view(request, course_id, task_id):
     student = get_objects(Member, user=request.user, course=course, role='STUDENT')
     students = filter_objects(Member, course=course, role='STUDENT')
     files = filter_objects(File, task=task)
+    filtered_files = filter_objects(File, user=request.user, task=task)
 
     date_today = timezone.now
 
@@ -222,6 +223,7 @@ def task_detail_view(request, course_id, task_id):
         'student': student,
         'students': students,
         'files': files,
+        'filtered_files': filtered_files,
         'form': form,
         'date_today': date_today
     }
@@ -380,6 +382,14 @@ def member_list_view(request, id):
 
     return render(request, 'course/member_list.html', context)
 
+@login_required
+def member_delete_view(request, course_id, user_id):
+    course = get_objects(Course, id=course_id)
+    
+    if course.author == request.user:
+        get_objects(Member, course=course_id, user=user_id).delete()
+
+    return redirect(f'/course/{course_id}/member/')
 
 @login_required
 def file_delete_view(request, id):

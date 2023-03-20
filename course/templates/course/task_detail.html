@@ -51,9 +51,15 @@
                     {% if task.date_due and date_today|date:'M j' >= task.date_due|date:'M j' %}
                         <small class="text-danger">Missed attaching</small>
                     {% else %}
-                        <button type="button" class="btn btn-sm btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#attachFileModal">
-                            Attach file
-                        </button>
+                        {% if not filtered_files.count >= 3 %}
+                            <button type="button" class="btn btn-sm btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#attachFileModal">
+                                Attach file
+                            </button>
+                        {% elif course.is_premium and not filtered_files.count >= 10 %}
+                            <button type="button" class="btn btn-sm btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#attachFileModal">
+                                Attach file
+                            </button>
+                        {% endif %}
                     {% endif %}
 
                     <div class="mt-3">
