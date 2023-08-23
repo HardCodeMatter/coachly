@@ -5,7 +5,7 @@ from .models import (
     Announcement,
     Task,
     Grade,
-    File
+    File,
 )
 
 
@@ -118,7 +118,7 @@ class GradeAdmin(admin.ModelAdmin):
     search_fields = ('user', 'task', 'grade', 'date_assigned',)
     ordering = ('-id',)
 
-
+    
 @admin.register(File)
 class FileAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'course', 'task', 'date_attached')

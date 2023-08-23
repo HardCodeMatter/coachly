@@ -320,6 +320,7 @@ def grade_list_view(request, id):
     grades = filter_objects(Grade, course=course)
     teacher = get_objects(Member, user=request.user, course=course, role='TEACHER')
     student = get_objects(Member, user=request.user, course=course, role='Student')
+
     
     date_today = timezone.now
 
@@ -381,7 +382,7 @@ def member_list_view(request, id):
     }
 
     return render(request, 'course/member_list.html', context)
-
+  
 @login_required
 def member_delete_view(request, course_id, user_id):
     course = get_objects(Course, id=course_id)

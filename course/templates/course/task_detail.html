@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% load crispy_forms_tags %}
-
+              
 {% block content %}
     <div class="container">
         <div class="list-group">
@@ -153,5 +153,32 @@
                 </form>
             </div>
         </div>
+
+            <div class="modal" id="attachFileModal" tabindex="-1" aria-labelledby="attachFileModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="attachFileModalLabel">Attach file</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            
+                            <div class="modal-body">
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-sm btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

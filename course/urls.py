@@ -25,6 +25,5 @@ urlpatterns = [
 
     path('course/<int:id>/member/', views.member_list_view, name='member_list'),
     path('course/<int:course_id>/member/<int:user_id>/delete/', views.member_delete_view, name='member_delete'),
-
     path('course/file/<int:id>/delete', views.file_delete_view, name='file_delete'),
 ]
