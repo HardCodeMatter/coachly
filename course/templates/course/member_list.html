@@ -20,7 +20,16 @@
             {% for student in students %}
                 <div class="list-group-item d-flex justify-content-between p-3">
                     <div>{{ student.user }}</div>
-                    <small class="text-muted">{{ student.role.title }}</small>
+                    
+                    {% if course.author == user %}
+                        <a class="text-decoration-none" href="{% url 'member_delete' course.id student.id %}">
+                            <small class="text-danger">
+                                Delete
+                            </small>
+                        </a>
+                    {% else %}
+                        <small class="text-muted">{{ student.role.title }}</small>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

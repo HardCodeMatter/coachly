@@ -4,8 +4,10 @@ from .models import (
     Member,
     Announcement,
     Task,
-    Grade
+    Grade,
+    File,
 )
+
 
 class GradeInline(admin.StackedInline):
     model = Grade
@@ -114,4 +116,25 @@ class GradeAdmin(admin.ModelAdmin):
     ]
 
     search_fields = ('user', 'task', 'grade', 'date_assigned',)
+    ordering = ('-id',)
+
+    
+@admin.register(File)
+class FileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'course', 'task', 'date_attached')
+    list_filter = ('id', 'user', 'course', 'task', 'date_attached')
+
+    fieldsets = [
+        ('Belongs', {
+            'fields': ('user', 'course', 'task'),
+        }),
+        ('File', {
+            'fields': ('file',),
+        }),
+        ('Date', {
+            'fields': ('date_attached',),
+        }),
+    ]
+
+    search_fields = ('user', 'course', 'task', 'file', 'date_attached')
     ordering = ('-id',)

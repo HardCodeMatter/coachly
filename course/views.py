@@ -7,14 +7,16 @@ from .models import (
     Member,
     Announcement,
     Task,
-    Grade
+    Grade,
+    File
 )
 from .forms import (
     CourseForm, 
     CourseJoinForm,
     AnnounceForm,
     TaskForm,
-    GradeForm
+    GradeForm,
+    FileForm
 )
 from .services import (
     course_create, 
@@ -191,12 +193,39 @@ def task_list_view(request, id):
 def task_detail_view(request, course_id, task_id):
     course = get_objects(Course, id=course_id)
     task = get_objects(Task, id=task_id, course=course)
+    teacher = get_objects(Member, user=request.user, course=course, role='TEACHER')
     student = get_objects(Member, user=request.user, course=course, role='STUDENT')
+    students = filter_objects(Member, course=course, role='STUDENT')
+    files = filter_objects(File, task=task)
+    filtered_files = filter_objects(File, user=request.user, task=task)
+
+    date_today = timezone.now
+
+    if request.method == 'POST':
+        form = FileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            File.objects.create(
+                user=request.user,
+                course=course,
+                task=task,
+                file=form.cleaned_data['file']
+            )
+
+            return redirect(f'/course/{course_id}/task/{task_id}/')
+    else:
+        form = FileForm(request.FILES)
 
     context = {
         'course': course,
         'task': task,
+        'teacher': teacher,
         'student': student,
+        'students': students,
+        'files': files,
+        'filtered_files': filtered_files,
+        'form': form,
+        'date_today': date_today
     }
 
     return render(request, 'course/task_detail.html', context)
@@ -290,6 +319,8 @@ def grade_list_view(request, id):
     tasks = filter_objects(Task, course=course).order_by('-date_created')
     grades = filter_objects(Grade, course=course)
     teacher = get_objects(Member, user=request.user, course=course, role='TEACHER')
+    student = get_objects(Member, user=request.user, course=course, role='Student')
+
     
     date_today = timezone.now
 
@@ -298,7 +329,8 @@ def grade_list_view(request, id):
         'tasks': tasks,
         'grades': grades,
         'teacher': teacher,
-        'date_today': date_today,
+        'student': student,
+        'date_today': date_today
     }
 
     return render(request, 'course/grade_list.html', context)
@@ -350,3 +382,22 @@ def member_list_view(request, id):
     }
 
     return render(request, 'course/member_list.html', context)
+  
+@login_required
+def member_delete_view(request, course_id, user_id):
+    course = get_objects(Course, id=course_id)
+    
+    if course.author == request.user:
+        get_objects(Member, course=course_id, user=user_id).delete()
+
+    return redirect(f'/course/{course_id}/member/')
+
+@login_required
+def file_delete_view(request, id):
+    file = get_objects(File, id=id)
+    student = get_objects(Member, user=request.user, course=file.course_id, role='STUDENT')
+
+    if student:
+        file.delete()
+
+    return redirect(f'/course/{file.course_id}/task/{file.task_id}/')
